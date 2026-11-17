@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= tarefa ? 'Editar tarefa' : 'Nova tarefa' %> | Portal Acadêmico</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <%- include('../layouts/main') %>
+
+    <main class="container">
+
+        <div class="breadcrumb">Início / Área do Aluno / <%= tarefa ? 'Editar tarefa' : 'Nova tarefa' %></div>
+
+        <h1 class="titulo-pagina"><%= tarefa ? 'Editar tarefa acadêmica' : 'Cadastrar nova tarefa' %></h1>
+        <p class="subtitulo">Preencha as informações para organizar sua atividade acadêmica.</p>
+
+        <div class="painel-titulo">Dados da tarefa</div>
+
+        <section class="formulario">
+
+            <% if (erro) { %>
+                <div class="erro"><%= erro %></div>
+            <% } %>
+
+            <form action="<%= tarefa ? '/' + tarefa.id : '/' %>" method="POST">
+
+                <div class="campo">
+                    <label for="titulo">Título da tarefa *</label>
+                    <input
+                        type="text"
+                        id="titulo"
+                        name="titulo"
+                        value="<%= tarefa ? tarefa.titulo : '' %>"
+                        minlength="3"
+                        maxlength="100"
+                        required
+                        placeholder="Ex.: Entrega da atividade de programação"
+                    >
+                    <small class="ajuda">Informe um título entre 3 e 100 caracteres.</small>
+                </div>
+
+                <div class="campo">
+                    <label for="disciplina">Disciplina *</label>
+                    <input
+                        type="text"
+                        id="disciplina"
+                        name="disciplina"
+                        value="<%= tarefa ? tarefa.disciplina : '' %>"
+                        minlength="2"
+                        maxlength="80"
+                        required
+                        placeholder="Ex.: Arquitetura de Software"
+                    >
+                    <small class="ajuda">Informe a disciplina relacionada à tarefa.</small>
+                </div>
+
+                <div class="campo">
+                    <label for="descricao">Descrição</label>
+                    <textarea
+                        id="descricao"
+                        name="descricao"
+                        maxlength="500"
+                        placeholder="Descreva os detalhes da atividade..."
+                    ><%= tarefa ? tarefa.descricao : '' %></textarea>
+                    <small class="ajuda">Campo opcional. Limite de 500 caracteres.</small>
+                </div>
+
+                <div class="form-acoes">
+                    <button type="submit" class="botao botao-verde">
+                        <%= tarefa ? 'Salvar alterações' : 'Cadastrar tarefa' %>
+                    </button>
+
+                    <a href="/" class="botao botao-cinza">Cancelar</a>
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <footer class="rodape">
+        Sistema de Gerenciamento de Tarefas Acadêmicas
+    </footer>
+
+</body>
+</html>

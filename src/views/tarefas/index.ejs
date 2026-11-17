@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Tarefas | Portal Acadêmico</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <%- include('../layouts/main') %>
+
+    <main class="container">
+
+        <div class="breadcrumb">Início / Área do Aluno / Minhas Tarefas</div>
+
+        <h1 class="titulo-pagina">Minhas Tarefas Acadêmicas</h1>
+        <p class="subtitulo">Organize e acompanhe suas atividades e compromissos acadêmicos.</p>
+
+        <div class="aviso aviso-verde">
+            <div class="aviso-icone">✓</div>
+            <div class="aviso-texto">Bem-vindo ao seu painel de gerenciamento de tarefas!</div>
+        </div>
+
+        <div class="painel-titulo">Resumo das atividades</div>
+
+        <section class="resumo">
+            <div class="resumo-card">
+                <div class="resumo-icone icone-total">▤</div>
+                <div class="resumo-info">
+                    <strong><%= tarefas.length %></strong>
+                    <span>Total de tarefas</span>
+                </div>
+            </div>
+
+            <div class="resumo-card">
+                <div class="resumo-icone icone-pendente">!</div>
+                <div class="resumo-info">
+                    <strong><%= tarefas.filter(t => t.status === 'pendente').length %></strong>
+                    <span>Tarefas pendentes</span>
+                </div>
+            </div>
+
+            <div class="resumo-card">
+                <div class="resumo-icone icone-concluida">✓</div>
+                <div class="resumo-info">
+                    <strong><%= tarefas.filter(t => t.status === 'concluida').length %></strong>
+                    <span>Tarefas concluídas</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="painel-titulo">Lista de tarefas</div>
+
+        <div class="barra-acoes">
+            <div class="filtros">
+                <a href="/" class="filtro <%= filtroAtual === 'todas' ? 'ativo' : '' %>">Todas</a>
+                <a href="/?status=pendente" class="filtro <%= filtroAtual === 'pendente' ? 'ativo' : '' %>">Pendentes</a>
+                <a href="/?status=concluida" class="filtro <%= filtroAtual === 'concluida' ? 'ativo' : '' %>">Concluídas</a>
+            </div>
+
+            <a href="/nova" class="botao botao-verde">+ Nova tarefa</a>
+        </div>
+
+        <% if (tarefas.length === 0) { %>
+            <div class="vazio">
+                <h3>Nenhuma tarefa encontrada</h3>
+                <p>Cadastre uma nova tarefa ou altere o filtro selecionado.</p>
+            </div>
+        <% } else { %>
+
+            <section class="lista-tarefas">
+
+                <% tarefas.forEach(tarefa => { %>
+
+                    <article class="tarefa-card <%= tarefa.status === 'concluida' ? 'concluida' : '' %>">
+
+                        <div class="tarefa-conteudo">
+                            <h3><%= tarefa.titulo %></h3>
+
+                            <p><strong>Disciplina:</strong> <%= tarefa.disciplina %></p>
+
+                            <% if (tarefa.descricao) { %>
+                                <p><%= tarefa.descricao %></p>
+                            <% } %>
+
+                            <span class="status <%= tarefa.status === 'concluida' ? 'status-concluida' : 'status-pendente' %>">
+                                <%= tarefa.status === 'concluida' ? 'Concluída' : 'Pendente' %>
+                            </span>
+                        </div>
+
+                        <div class="tarefa-acoes">
+                            <a href="/<%= tarefa.id %>" class="botao botao-cinza">Detalhes</a>
+
+                            <a href="/<%= tarefa.id %>/editar" class="botao botao-verde">Editar</a>
+
+                            <% if (tarefa.status === 'pendente') { %>
+                                <form action="/<%= tarefa.id %>/concluir?_method=PATCH" method="POST">
+                                    <button type="submit" class="botao botao-laranja">Concluir</button>
+                                </form>
+                            <% } %>
+
+                            <form action="/<%= tarefa.id %>?_method=DELETE" method="POST"
+                                onsubmit="return confirm('Tem certeza que deseja excluir esta tarefa?')">
+                                <button type="submit" class="botao botao-vermelho">Excluir</button>
+                            </form>
+                        </div>
+
+                    </article>
+
+                <% }) %>
+
+            </section>
+
+        <% } %>
+
+    </main>
+
+    <footer class="rodape">
+        Sistema de Gerenciamento de Tarefas Acadêmicas
+    </footer>
+
+</body>
+</html>
